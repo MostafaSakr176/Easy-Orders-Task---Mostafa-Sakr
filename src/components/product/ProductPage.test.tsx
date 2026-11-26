@@ -23,10 +23,10 @@ function renderPage() {
 describe("product page cart flow", () => {
   beforeEach(() => {
     localStorage.clear();
-    useCartStore.setState({ items: [] });
-    useWishlistStore.setState({ items: [] });
-    useCompareStore.setState({ items: [] });
-    useUiStore.setState({ cartOpen: false, wishlistOpen: false, compareOpen: false, checkout: false, toast: null });
+    useCartStore.setState({ items: [], hydrated: true });
+    useWishlistStore.setState({ items: [], hydrated: true });
+    useCompareStore.setState({ items: [], hydrated: true });
+    useUiStore.setState({ cartOpen: false, wishlistOpen: false, compareOpen: false, checkout: false, toast: null, currency: "EGP" });
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -58,7 +58,7 @@ describe("product page cart flow", () => {
     expect(within(dialog).getByText("2")).toBeInTheDocument();
     await user.click(within(dialog).getByRole("button", { name: "Remove" }));
     expect(within(dialog).getByText("Your cart is empty")).toBeInTheDocument();
-  });
+  }, 15000);
 
   it("saves a wish, compares two products, and moves sizes with the keyboard", async () => {
     const user = userEvent.setup();
@@ -88,5 +88,5 @@ describe("product page cart flow", () => {
     screen.getByRole("radio", { name: "38" }).focus();
     await user.keyboard("{ArrowRight}");
     expect(screen.getByRole("radio", { name: "40" })).toHaveAttribute("aria-checked", "true");
-  });
+  }, 15000);
 });

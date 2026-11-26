@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useUiStore } from "../store/uiStore";
+
+const INSTALL_SEEN_KEY = "easy-orders-install-seen";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -24,9 +27,20 @@ function isStandalone() {
 
 export function useInstallApp() {
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
-  const [installed, setInstalled] = useState(false);
+  const [installed, setInstalled] = useState(isStandalone);
   const [mobile] = useState(isMobile);
   const [ios] = useState(isIos);
+  const setOpen = useUiStore((state) => state.setInstallOpen);
+
+  useEffect(() => {
+    if (isStandalone()) return;
+    try {
+      if (localStorage.getItem(INSTALL_SEEN_KEY) === "1") return;
+    } catch {
+      return;
+    }
+    setOpen(true);
+  }, [setOpen]);
 
   useEffect(() => {
     setInstalled(isStandalone());
@@ -57,11 +71,21 @@ export function useInstallApp() {
     return choice.outcome;
   }
 
+  function dismiss() {
+    try {
+      localStorage.setItem(INSTALL_SEEN_KEY, "1");
+    } catch {
+      // Private mode can block storage. Closing the dialog still works.
+    }
+    setOpen(false);
+  }
+
   return {
     mobile,
     ios,
     installed,
     canPrompt: promptEvent !== null,
     install,
+    dismiss,
   };
 }

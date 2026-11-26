@@ -186,6 +186,8 @@ export function useProductPage(): ProductPageState {
       brand: brandLabel(product),
       image: product.thumb,
       priceLabel: formatMoney(price.current, currency),
+      amount: price.current,
+      currency,
       ratingLabel: rating.toFixed(1),
     });
     if (result === "limit") {

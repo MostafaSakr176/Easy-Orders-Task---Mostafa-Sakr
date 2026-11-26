@@ -1,4 +1,4 @@
-import { formatMoney } from "../../lib/money";
+import { useDisplayMoney } from "../../hooks/useDisplayMoney";
 import { popularProducts } from "../../data/catalog";
 import { useProductPage } from "../../hooks/useProductPage";
 import { PageSkeleton } from "./PageSkeleton";
@@ -17,6 +17,7 @@ import { CompareBar } from "../compare/CompareBar";
 import { CompareDialog } from "../compare/CompareDialog";
 export function ProductPage() {
   const page = useProductPage();
+  const displayMoney = useDisplayMoney();
   if (page.status === "pending") return <PageSkeleton />;
   if (page.status === "error") {
     return (
@@ -120,7 +121,7 @@ export function ProductPage() {
         <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-[#ececec] bg-white px-4 py-3 xl:hidden">
           <div>
             <p className="text-xs text-muted">{count} in cart</p>
-            <p className="text-lg font-semibold">{formatMoney(price.current, currency)}</p>
+            <p className="text-lg font-semibold">{displayMoney(price.current, currency)}</p>
           </div>
           <button type="button" className="h-12 rounded-lg bg-ink px-5 font-semibold text-white" onClick={addCurrent}>
             Add To Cart

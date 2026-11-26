@@ -9,7 +9,7 @@ import type { CatalogCard } from "../../data/catalog";
 export const ProductCard = memo(function ProductCard({ product, list }: { product: CatalogCard; list: string }) {
   const card = useCatalogCard(product, list);
   return (
-    <li className="group flex min-w-0 xl:w-[212px] xl:shrink-0">
+    <li id={product.id} className="group flex min-w-0 xl:w-[212px] xl:shrink-0">
       <div className="flex h-full w-full flex-col">
         <div className="relative">
           <a href="#product" onClick={card.select} className="block aspect-[3/4] overflow-hidden rounded-lg bg-[#f2f2f2] xl:aspect-auto xl:h-[284px]">

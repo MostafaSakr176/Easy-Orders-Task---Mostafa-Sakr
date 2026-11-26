@@ -22,6 +22,7 @@ export interface CartItem {
 }
 
 interface CartState {
+  hydrated: boolean;
   items: CartItem[];
   addItem: (item: Omit<CartItem, "id" | "quantity"> & { quantity?: number }) => void;
   setQuantity: (id: string, quantity: number) => void;
@@ -42,6 +43,7 @@ export const selectCartSubtotal = (items: CartItem[]): number =>
 export const useCartStore = create<CartState>()(
   persist(
     immer((set) => ({
+      hydrated: false,
       items: [],
       addItem: (item) =>
         set((state) => {
@@ -77,6 +79,15 @@ export const useCartStore = create<CartState>()(
           state.items = [];
         }),
     })),
-    { name: "easy-orders-cart", version: 1 },
+    {
+      name: "easy-orders-cart",
+      version: 1,
+      partialize: (state) => ({ items: state.items }),
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<CartState>),
+        hydrated: true,
+      }),
+    },
   ),
 );

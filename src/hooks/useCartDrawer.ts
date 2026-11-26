@@ -1,5 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { track } from "../lib/analytics";
+import { useDisplayMoney } from "./useDisplayMoney";
+import { convertMoney } from "../lib/money";
 import { selectCartSubtotal, useCartStore } from "../store/cartStore";
 import { useUiStore } from "../store/uiStore";
 
@@ -10,6 +12,9 @@ export function useCartDrawer() {
   const setCheckout = useUiStore((state) => state.setCheckout);
   const pushToast = useUiStore((state) => state.pushToast);
   const items = useCartStore((state) => state.items);
+  const hydrated = useCartStore((state) => state.hydrated);
+  const displayMoney = useDisplayMoney();
+  const selectedCurrency = useUiStore((state) => state.currency);
   const setQuantity = useCartStore((state) => state.setQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
   const clear = useCartStore((state) => state.clear);
@@ -40,7 +45,14 @@ export function useCartDrawer() {
     checkout,
     closeCart,
     items,
+    hydrated,
     subtotal,
+    displaySubtotal: items.reduce(
+      (total, item) => total + convertMoney(item.unitPrice, item.currency, selectedCurrency) * item.quantity,
+      0,
+    ),
+    selectedCurrency,
+    displayMoney,
     currency,
     placed,
     setQuantity,

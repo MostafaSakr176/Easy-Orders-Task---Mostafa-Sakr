@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { track } from "../lib/analytics";
-import { formatMoney } from "../lib/money";
+import { useDisplayMoney } from "./useDisplayMoney";
 import { useUiStore } from "../store/uiStore";
 import { useWishlistStore } from "../store/wishlistStore";
 
@@ -8,6 +8,8 @@ export function useWishlistDrawer(activeProductId?: string, onAddActive?: () => 
   const open = useUiStore((state) => state.wishlistOpen);
   const setOpen = useUiStore((state) => state.setWishlistOpen);
   const items = useWishlistStore((state) => state.items);
+  const hydrated = useWishlistStore((state) => state.hydrated);
+  const displayMoney = useDisplayMoney();
   const toggle = useWishlistStore((state) => state.toggle);
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export function useWishlistDrawer(activeProductId?: string, onAddActive?: () => 
   return {
     open,
     items,
+    hydrated,
     close: () => setOpen(false),
     remove: (productId: string) => {
       const item = items.find((entry) => entry.productId === productId);
@@ -35,6 +38,6 @@ export function useWishlistDrawer(activeProductId?: string, onAddActive?: () => 
       setOpen(false);
     },
     canAdd: (productId: string) => productId === activeProductId && Boolean(onAddActive),
-    price: (amount: number, currency: string) => formatMoney(amount, currency),
+    price: displayMoney,
   };
 }

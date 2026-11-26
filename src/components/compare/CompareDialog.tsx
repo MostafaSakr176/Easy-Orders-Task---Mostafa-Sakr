@@ -1,9 +1,11 @@
 import { useRef } from "react";
 import { useCompare } from "../../hooks/useCompare";
+import { useDisplayMoney } from "../../hooks/useDisplayMoney";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 
 export function CompareDialog() {
   const compare = useCompare();
+  const displayMoney = useDisplayMoney();
   const panel = useRef<HTMLDivElement>(null);
   useFocusTrap(compare.open, panel);
   if (!compare.open) return null;
@@ -40,7 +42,9 @@ export function CompareDialog() {
                   </div>
                   <div>
                     <dt className="text-[#7a7a7a]">Price</dt>
-                    <dd className="font-semibold">{item.priceLabel}</dd>
+                    <dd className="font-semibold">
+                      {typeof item.amount === "number" && item.currency ? displayMoney(item.amount, item.currency) : item.priceLabel}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-[#7a7a7a]">Rating</dt>

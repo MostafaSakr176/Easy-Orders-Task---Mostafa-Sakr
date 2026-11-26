@@ -1,7 +1,7 @@
 import iconStar from "../../assets/figma/icon-star.svg";
 import { Icon } from "../shared/Icon";
 import { QuantityStepper } from "../shared/QuantityStepper";
-import { formatMoney } from "../../lib/money";
+import { useDisplayMoney } from "../../hooks/useDisplayMoney";
 import { isOptionAvailable, stockLabel } from "../../lib/variants";
 import { InfoDialog } from "./InfoDialog";
 import { VariationOptions } from "./VariationOptions";
@@ -51,6 +51,7 @@ export function ProductInfo({
   notice,
 }: ProductInfoProps) {
   const info = useProductInfo(product, variant);
+  const displayMoney = useDisplayMoney();
   const { expanded, preview, purchasable, sizeVariation, sizeChart, deliveryOpen, html, canExpand } = info;
 
   return (
@@ -63,10 +64,10 @@ export function ProductInfo({
         <p className="flex items-center gap-4">
           {price.onSale ? (
             <span className="text-[18px] font-medium leading-[1.2] text-[#666] line-through">
-              {formatMoney(price.list, currency)}
+              {displayMoney(price.list, currency)}
             </span>
           ) : null}
-          <span className="text-[22px] font-semibold leading-[1.2] text-ink sm:text-[28px]">{formatMoney(price.current, currency)}</span>
+          <span className="text-[22px] font-semibold leading-[1.2] text-ink sm:text-[28px]">{displayMoney(price.current, currency)}</span>
         </p>
         <p className="flex items-center gap-2 text-[#666]">
           <span className={`text-[14px] leading-none sm:text-[20px] ${purchasable ? "" : "text-[#9a3b32]"}`}>

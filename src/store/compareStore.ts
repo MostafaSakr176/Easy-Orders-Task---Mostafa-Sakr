@@ -10,10 +10,13 @@ export interface CompareItem {
   brand: string;
   image: string;
   priceLabel: string;
+  amount?: number;
+  currency?: string;
   ratingLabel: string;
 }
 
 interface CompareState {
+  hydrated: boolean;
   items: CompareItem[];
   toggle: (item: CompareItem) => "added" | "removed" | "limit";
   remove: (id: string) => void;
@@ -23,6 +26,7 @@ interface CompareState {
 export const useCompareStore = create<CompareState>()(
   persist(
     immer((set, get) => ({
+      hydrated: false,
       items: [],
       toggle: (item) => {
         const existing = get().items.some((entry) => entry.id === item.id);
@@ -44,6 +48,15 @@ export const useCompareStore = create<CompareState>()(
           state.items = [];
         }),
     })),
-    { name: "easy-orders-compare", version: 1 },
+    {
+      name: "easy-orders-compare",
+      version: 1,
+      partialize: (state) => ({ items: state.items }),
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<CompareState>),
+        hydrated: true,
+      }),
+    },
   ),
 );

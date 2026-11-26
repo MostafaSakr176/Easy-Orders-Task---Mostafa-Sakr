@@ -5,6 +5,22 @@ export function currencyCode(product: Pick<Product, "custom_currency">): string 
   return code && code.length === 3 ? code.toUpperCase() : "EGP";
 }
 
+const UNIT_IN_EGP: Record<string, number> = {
+  EGP: 1,
+  USD: 49,
+  GBP: 62,
+};
+
+export function convertMoney(amount: number, from: string, to: string): number {
+  const source = from.trim().toUpperCase();
+  const target = to.trim().toUpperCase();
+  if (source === target) return amount;
+  const fromRate = UNIT_IN_EGP[source];
+  const toRate = UNIT_IN_EGP[target];
+  if (!fromRate || !toRate) return amount;
+  return Math.round(((amount * fromRate) / toRate) * 100) / 100;
+}
+
 export function formatMoney(amount: number, currency: string): string {
   const digits = Number.isInteger(amount) ? 0 : 2;
   try {

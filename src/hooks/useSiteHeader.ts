@@ -6,7 +6,9 @@ import { useWishlistStore } from "../store/wishlistStore";
 
 export function useSiteHeader() {
   const count = useCartStore((state) => selectCartCount(state.items));
+  const cartReady = useCartStore((state) => state.hydrated);
   const wishes = useWishlistStore((state) => state.items.length);
+  const wishesReady = useWishlistStore((state) => state.hydrated);
   const openCart = useUiStore((state) => state.openCart);
   const user = useUiStore((state) => state.user);
   const setSignInOpen = useUiStore((state) => state.setSignInOpen);
@@ -17,7 +19,7 @@ export function useSiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const mobileMenuId = useId();
-  const firstName = user ? user.name.split(" ")[0] : "Sign in";
+  const firstName = user ? user.name.trim().split(/\s+/)[0] || "Sign in" : "Sign in";
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -30,7 +32,9 @@ export function useSiteHeader() {
 
   return {
     count,
+    cartReady,
     wishes,
+    wishesReady,
     firstName,
     menuId,
     mobileMenuId,

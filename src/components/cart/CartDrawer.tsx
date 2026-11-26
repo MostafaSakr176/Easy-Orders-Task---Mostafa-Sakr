@@ -6,7 +6,7 @@ import { useCartDrawer } from "../../hooks/useCartDrawer";
 
 export function CartDrawer() {
   const cart = useCartDrawer();
-  const { open, checkout, closeCart, items, subtotal, currency, placed, setQuantity, remove, beginCheckout, placeOrder, continueShopping } = cart;
+  const { open, checkout, closeCart, items, hydrated, displaySubtotal, selectedCurrency, displayMoney, placed, setQuantity, remove, beginCheckout, placeOrder, continueShopping } = cart;
   const panel = useRef<HTMLElement>(null);
   useFocusTrap(open, panel);
 
@@ -47,6 +47,10 @@ export function CartDrawer() {
               </button>
             </div>
           </div>
+        ) : !hydrated ? (
+          <div className="grid flex-1 place-items-center px-6 text-center">
+            <p className="text-2xl font-semibold">Loading your cart</p>
+          </div>
         ) : items.length === 0 ? (
           <div className="grid flex-1 place-items-center px-6 text-center">
             <div>
@@ -68,7 +72,7 @@ export function CartDrawer() {
                     <p className="mt-1 text-sm capitalize text-[#666]">
                       {item.options.map((option) => `${option.name}: ${option.value}`).join(" · ")}
                     </p>
-                    <p className="mt-2 font-semibold">{formatMoney(item.unitPrice, item.currency)}</p>
+                    <p className="mt-2 font-semibold">{displayMoney(item.unitPrice, item.currency)}</p>
                     <div className="mt-3 flex items-center justify-between">
                       <QuantityStepper value={item.quantity} max={item.maxQuantity} onChange={(value) => setQuantity(item.id, value)} />
                       <button
@@ -86,7 +90,7 @@ export function CartDrawer() {
             <footer className="border-t border-[#ececec] px-5 py-5">
               <p className="flex items-center justify-between text-lg">
                 <span>Subtotal</span>
-                <span className="font-semibold">{formatMoney(subtotal, currency)}</span>
+                <span className="font-semibold">{formatMoney(displaySubtotal, selectedCurrency)}</span>
               </p>
               {checkout ? (
                 <form className="mt-4 space-y-3" onSubmit={placeOrder}>

@@ -8,6 +8,7 @@ import iconEmail from "../../assets/figma/icon-email.svg";
 import iconFlag from "../../assets/figma/icon-flag.svg";
 import { Icon } from "../shared/Icon";
 import { useSiteFooter } from "../../hooks/useSiteFooter";
+import { PolicyDialog } from "./PolicyDialog";
 
 const columns = [
   { title: "Shop", links: ["My account", "Login", "Wishlist", "Cart"] },
@@ -24,9 +25,10 @@ const socials = [
 
 export function SiteFooter() {
   const footer = useSiteFooter();
-  const { email, setEmail, joined, subscribe, currency, language, setCurrency, toggleLanguage } = footer;
+  const { email, setEmail, joined, subscribe, currency, language, setCurrency, toggleLanguage, policy, policyText, closePolicy } = footer;
 
   return (
+    <>
     <footer className="bg-[#f2f2f2]">
       <div className="mx-auto grid max-w-[1258px] gap-10 px-6 pb-8 pt-12 lg:grid-cols-[310px_1fr] lg:gap-x-16 lg:px-8 lg:pt-[72px]">
         <div className="text-center lg:text-left">
@@ -121,5 +123,7 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
+    <PolicyDialog title={policy} text={policyText} onClose={closePolicy} />
+    </>
   );
 }

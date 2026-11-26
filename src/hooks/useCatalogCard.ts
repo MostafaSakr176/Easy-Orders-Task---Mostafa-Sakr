@@ -30,6 +30,8 @@ export function useCatalogCard(product: CatalogCard, list: string) {
       brand: product.brand,
       image: product.image,
       priceLabel: product.price,
+      amount: product.amount,
+      currency: "USD",
       ratingLabel: product.rating,
     });
     if (result === "limit") {

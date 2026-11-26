@@ -21,7 +21,9 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
   const header = useSiteHeader();
   const {
     count,
+    cartReady,
     wishes,
+    wishesReady,
     firstName,
     menuId,
     mobileMenuId,
@@ -56,7 +58,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
           </button>
           <button type="button" className="relative inline-flex md:hidden" aria-label={`Cart, ${count} items`} onClick={openCart}>
             <Icon src={iconCart} size={20} />
-            {count > 0 ? (
+            {cartReady && count > 0 ? (
               <span className="absolute -right-1 -top-1 grid size-[13px] place-items-center rounded-full bg-ink text-[8px] leading-none text-white">
                 {count > 9 ? "9+" : count}
               </span>
@@ -118,16 +120,14 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
                 </div>
               ) : null}
             </div>
-            <button type="button" className="inline-flex items-center" onClick={openInstall}>
-              Install
-            </button>
+            
             <button type="button" className="inline-flex items-center gap-1" onClick={signIn}>
               <Icon src={iconUser} size={20} />
-              <span className="hidden sm:inline">{firstName}</span>
+              <span className="hidden max-w-[7.5rem] truncate sm:inline-block">{firstName}</span>
             </button>
             <button type="button" className="relative inline-flex" aria-label={`Wishlist, ${wishes} saved`} onClick={openWishlist}>
               <Icon src={iconHeart} size={20} />
-              {wishes > 0 ? (
+              {wishesReady && wishes > 0 ? (
                 <span className="absolute -right-1 -top-1 grid size-[13px] place-items-center rounded-full bg-ink text-[8px] leading-none text-white">
                   {wishes}
                 </span>
@@ -135,7 +135,7 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
             </button>
             <button type="button" className="relative inline-flex" aria-label={`Cart, ${count} items`} onClick={openCart}>
               <Icon src={iconCart} size={20} />
-              {count > 0 ? (
+              {cartReady && count > 0 ? (
                 <span className="absolute -right-1 -top-1 grid size-[13px] place-items-center rounded-full bg-ink text-[8px] leading-none text-white">
                   {count > 9 ? "9+" : count}
                 </span>
@@ -187,11 +187,11 @@ export function SiteHeader({ categories }: SiteHeaderProps) {
               </button>
               <button type="button" className="flex items-center gap-2 py-2 text-left" onClick={openWishlist}>
                 <Icon src={iconHeart} size={20} />
-                Wishlist{wishes > 0 ? ` (${wishes})` : ""}
+                Wishlist{wishesReady && wishes > 0 ? ` (${wishes})` : ""}
               </button>
               <button type="button" className="flex items-center gap-2 py-2 text-left" onClick={signInFromMenu}>
                 <Icon src={iconUser} size={20} />
-                {firstName}
+                <span className="min-w-0 flex-1 truncate">{firstName}</span>
               </button>
             </div>
           </div>

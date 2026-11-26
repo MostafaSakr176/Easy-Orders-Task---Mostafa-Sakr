@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 export interface ToastMessage {
   id: number;
@@ -42,7 +43,7 @@ let toastSeq = 0;
 
 export const useUiStore = create<UiState>()(
   persist(
-    (set) => ({
+    immer((set) => ({
       cartOpen: false,
       checkout: false,
       searchOpen: false,
@@ -50,31 +51,74 @@ export const useUiStore = create<UiState>()(
       installOpen: false,
       wishlistOpen: false,
       compareOpen: false,
-      currency: "USD",
+      currency: "EGP",
       language: "English",
       user: null,
       toast: null,
-      openCart: () => set({ cartOpen: true }),
-      closeCart: () => set({ cartOpen: false, checkout: false }),
-      setCheckout: (checkout) => set({ checkout, cartOpen: true }),
-      setSearchOpen: (searchOpen) => set({ searchOpen }),
-      setSignInOpen: (signInOpen) => set({ signInOpen }),
-      setInstallOpen: (installOpen) => set({ installOpen }),
-      setWishlistOpen: (wishlistOpen) => set({ wishlistOpen }),
-      setCompareOpen: (compareOpen) => set({ compareOpen }),
-      setCurrency: (currency) => set({ currency }),
-      setLanguage: (language) => set({ language }),
-      setUser: (user) => set({ user, signInOpen: false }),
+      openCart: () =>
+        set((state) => {
+          state.cartOpen = true;
+        }),
+      closeCart: () =>
+        set((state) => {
+          state.cartOpen = false;
+          state.checkout = false;
+        }),
+      setCheckout: (checkout) =>
+        set((state) => {
+          state.checkout = checkout;
+          state.cartOpen = true;
+        }),
+      setSearchOpen: (searchOpen) =>
+        set((state) => {
+          state.searchOpen = searchOpen;
+        }),
+      setSignInOpen: (signInOpen) =>
+        set((state) => {
+          state.signInOpen = signInOpen;
+        }),
+      setInstallOpen: (installOpen) =>
+        set((state) => {
+          state.installOpen = installOpen;
+        }),
+      setWishlistOpen: (wishlistOpen) =>
+        set((state) => {
+          state.wishlistOpen = wishlistOpen;
+        }),
+      setCompareOpen: (compareOpen) =>
+        set((state) => {
+          state.compareOpen = compareOpen;
+        }),
+      setCurrency: (currency) =>
+        set((state) => {
+          state.currency = currency;
+        }),
+      setLanguage: (language) =>
+        set((state) => {
+          state.language = language;
+        }),
+      setUser: (user) =>
+        set((state) => {
+          state.user = user;
+          state.signInOpen = false;
+        }),
       pushToast: (text) => {
         toastSeq += 1;
         const id = toastSeq;
-        set({ toast: { id, text } });
+        set((state) => {
+          state.toast = { id, text };
+        });
         window.setTimeout(() => {
-          set((state) => (state.toast?.id === id ? { toast: null } : {}));
+          set((state) => {
+            if (state.toast?.id === id) state.toast = null;
+          });
         }, 2800);
       },
-      dismissToast: () => set({ toast: null }),
-    }),
+      dismissToast: () =>
+        set((state) => {
+          state.toast = null;
+        }),
+    })),
     {
       name: "easy-orders-ui",
       partialize: (state) => ({

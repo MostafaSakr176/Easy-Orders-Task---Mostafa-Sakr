@@ -37,7 +37,7 @@ export function SearchDialog({ onClose }: SearchDialogProps) {
           {empty ? <li className="text-sm text-body">No matches.</li> : null}
           {results.map((item) => (
             <li key={item.id}>
-              <a href="#related" onClick={() => choose(item.id)} onKeyDown={onResultKeyDown} className="flex items-center gap-3 rounded-lg p-2 hover:bg-[#f2f2f2]">
+              <a href={`#${item.id}`} onClick={() => choose(item.id)} onKeyDown={onResultKeyDown} className="flex items-center gap-3 rounded-lg p-2 hover:bg-[#f2f2f2]">
                 <img src={item.image} alt="" className="h-14 w-11 rounded-md object-cover" />
                 <span>
                   <span className="block text-sm font-semibold">{item.brand}</span>

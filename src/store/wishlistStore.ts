@@ -11,6 +11,7 @@ export interface WishItem {
 }
 
 interface WishlistState {
+  hydrated: boolean;
   items: WishItem[];
   toggle: (item: WishItem) => void;
   has: (productId: string) => boolean;
@@ -19,6 +20,7 @@ interface WishlistState {
 export const useWishlistStore = create<WishlistState>()(
   persist(
     immer((set, get) => ({
+      hydrated: false,
       items: [],
       toggle: (item) =>
         set((state) => {
@@ -28,6 +30,15 @@ export const useWishlistStore = create<WishlistState>()(
         }),
       has: (productId) => get().items.some((item) => item.productId === productId),
     })),
-    { name: "easy-orders-wishlist", version: 1 },
+    {
+      name: "easy-orders-wishlist",
+      version: 1,
+      partialize: (state) => ({ items: state.items }),
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<WishlistState>),
+        hydrated: true,
+      }),
+    },
   ),
 );

@@ -19,7 +19,7 @@ const line = {
 describe("cart store", () => {
   beforeEach(() => {
     localStorage.clear();
-    useCartStore.setState({ items: [] });
+    useCartStore.setState({ items: [], hydrated: true });
   });
 
   it("adds a line and merges a repeat add without passing the stock cap", () => {

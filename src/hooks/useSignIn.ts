@@ -11,8 +11,8 @@ export function useSignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setUser({
-      name: String(data.get("name") ?? ""),
-      email: String(data.get("email") ?? ""),
+      name: String(data.get("name") ?? "").trim().replace(/\s+/g, " "),
+      email: String(data.get("email") ?? "").trim(),
     });
   }
 

@@ -11,7 +11,7 @@ export function WishlistDrawer({ activeProductId, onAddActive }: WishlistDrawerP
   const drawer = useWishlistDrawer(activeProductId, onAddActive);
   const panel = useRef<HTMLElement>(null);
   useFocusTrap(drawer.open, panel);
-  const { open, items, close, remove, addActive, canAdd, price } = drawer;
+  const { open, items, hydrated, close, remove, addActive, canAdd, price } = drawer;
 
   return (
     <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} aria-hidden={!open} inert={!open ? true : undefined}>
@@ -36,7 +36,11 @@ export function WishlistDrawer({ activeProductId, onAddActive }: WishlistDrawerP
             Close
           </button>
         </header>
-        {items.length === 0 ? (
+        {!hydrated ? (
+          <div className="grid flex-1 place-items-center px-6 text-center">
+            <p className="text-2xl font-semibold">Loading your wishlist</p>
+          </div>
+        ) : items.length === 0 ? (
           <div className="grid flex-1 place-items-center px-6 text-center">
             <div>
               <p className="text-2xl font-semibold">Your wishlist is empty</p>

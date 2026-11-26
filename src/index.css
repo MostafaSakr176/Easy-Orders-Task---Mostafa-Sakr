@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Clash Grotesk", "Segoe UI", sans-serif;
+  --font-label: "Raleway", "Clash Grotesk", sans-serif;
+  --color-ink: #141414;
+  --color-title: #292929;
+  --color-muted: #8f8f8f;
+  --color-body: #666666;
+  --color-soft: #f2f2f2;
+  --color-star: #ffa439;
+  --color-line: #e6e6e6;
+  --color-grey: #818b9c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #141414;
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input,
+textarea {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #141414;
+  outline-offset: 2px;
+}
+
+.description-html ul {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.description-html li {
+  margin: 0.35rem 0;
+}
+
+.description-html p {
+  margin: 0.75rem 0;
+}
+
+.description-html a {
+  color: #141414;
+  text-decoration: underline;
+}
+
+.gallery-main .swiper,
+.gallery-main .swiper-wrapper,
+.gallery-main .swiper-slide {
+  height: 100%;
+}
+
+.gallery-thumbs .swiper-slide {
+  width: auto;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-in {
+  animation: toast-in 180ms ease-out;
+}
